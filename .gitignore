@@ -1,0 +1,25 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+*.env
+
+# Airflow logs and metadata
+logs/
+airflow.db
+unittests.cfg
+
+# Jupyter & notebook checkpoints (optional)
+.ipynb_checkpoints/
+
+# Docker
+*.pid
+docker-compose.override.yml
+
