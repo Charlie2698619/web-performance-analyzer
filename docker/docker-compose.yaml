@@ -6,16 +6,15 @@ services:
     command: 
       - "--mysql-native-password=ON" 
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: pagespeed_db  
-      MYSQL_USER: devcharlie
-      MYSQL_PASSWORD: devcharlie
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      
 
   airflow-init:
     image: apache/airflow:2.7.0-python3.10
@@ -23,19 +22,19 @@ services:
       - mysql_pagespeed
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://devcharlie:devcharlie@mysql_pagespeed:3306/pagespeed_db
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_pagespeed:3306/${MYSQL_DATABASE}
       PAGESPEED_API_KEY: ${PAGESPEED_API_KEY}
       TARGET_URL: ${TARGET_URL}
     entrypoint: >
       bash -c "
         airflow db init &&
         airflow users create
-          --username devcharlie 
-          --password Tony00642! 
-          --firstname Charlie 
-          --lastname Dev 
-          --role Admin 
-          --email devcharlie2698619@gmail.com
+          --username ${AIRFLOW_USER}
+          --password ${AIRFLOW_PASSWORD}
+          --firstname ${AIRFLOW_FIRSTNAME}
+          --lastname ${AIRFLOW_LASTNAME}
+          --role Admin
+          --email ${AIRFLOW_EMAIL}
       "
     volumes:
       - ../dags:/opt/airflow/dags
@@ -51,7 +50,7 @@ services:
       - mysql_pagespeed
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://devcharlie:devcharlie@mysql_pagespeed:3306/pagespeed_db
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql_pagespeed:3306/${MYSQL_DATABASE}
       PAGESPEED_API_KEY: ${PAGESPEED_API_KEY}
       TARGET_URL: ${TARGET_URL}
       AIRFLOW__SMTP__SMTP_HOST: ${AIRFLOW__SMTP__SMTP_HOST}
