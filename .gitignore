@@ -23,3 +23,7 @@ unittests.cfg
 *.pid
 docker-compose.override.yml
 
+# Ignore data files
+ETL/data/*.csv
+data/
+

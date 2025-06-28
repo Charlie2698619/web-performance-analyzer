@@ -6,6 +6,9 @@ import mysql.connector
 import logging
 import json
 import os
+from dotenv import load_dotenv
+
+load_dotenv() 
 
 # Config from environment variables
 API_KEY = os.environ.get("PAGESPEED_API_KEY", "")
@@ -16,18 +19,19 @@ def load_urls():
         return json.load(f)
 
 DB_CONFIG = {
-    'host': os.environ.get("MYSQL_HOST", "mysql"),
-    'user': os.environ.get("MYSQL_USER", "airflow"),
-    'password': os.environ.get("MYSQL_PASSWORD", "airflow"),
-    'database': os.environ.get("MYSQL_DATABASE", "pagespeed_db"),
-    'port': int(os.environ.get("MYSQL_PORT", 3306)),
+    'host': os.environ.get("MYSQL_HOST"),
+    'database': os.environ.get("MYSQL_DB"),
+    'user': os.environ.get("MYSQL_USER", "devcharlie"),
+    'password': os.environ.get("MYSQL_PASSWORD", "devcharlie"),
+    'port': int(os.environ.get("MYSQL_PORT", 3307))
+
 }
 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2025, 6, 13),
-    'end_date': datetime(2025, 6, 20),
+    'start_date': datetime(2025, 6, 16),
+    'end_date': datetime(2025, 6, 24),
     'retries': 2,
     'retry_delay': timedelta(minutes=1),
     'email_on_failure': True,
